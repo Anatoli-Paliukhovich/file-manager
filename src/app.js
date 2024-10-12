@@ -5,6 +5,7 @@ import {
   navigateUp,
   changeDirectory,
 } from "./navigation/directory.js";
+import { listFilesAsync } from "./list/listFiles.js";
 
 greetUser();
 const rl = readline.createInterface({
@@ -14,16 +15,33 @@ const rl = readline.createInterface({
 
 rl.on("line", (line) => {
   const lineArr = line.trim().split(" ");
+
   switch (lineArr[0]) {
     case ".exit":
       rl.close();
       break;
     case "cd":
-      changeDirectory(lineArr[1]);
+      if (lineArr.length === 2) {
+        changeDirectory(lineArr[1]);
+      } else {
+        console.error(`Invalid input`);
+      }
       break;
     case "up":
-      navigateUp();
-      showCurDir();
+      if (lineArr.length === 1) {
+        navigateUp();
+        showCurDir();
+      } else {
+        console.error(`Invalid input`);
+      }
+      break;
+    case "ls":
+      if (lineArr.length === 1) {
+        listFilesAsync();
+        showCurDir();
+      } else {
+        console.error(`Invalid input`);
+      }
       break;
     default:
       console.error(`Invalid input`);
