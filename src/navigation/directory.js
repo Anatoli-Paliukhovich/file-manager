@@ -21,18 +21,21 @@ export const navigateUp = () => {
 };
 
 export const changeDirectory = async (directory) => {
-	try {
-	  if (directory) {
-		 const newDisk = directory.toUpperCase() + `\\`;
-		 await fs.access(newDisk);
-		 process.chdir(newDisk);
-		 showCurDir();
-		 return;
-	  }
-	  const absolutePath = path.resolve(process.cwd(), directory);
-	  await fs.access(absolutePath);
-	  process.chdir(absolutePath);
-	} catch (error) {
-	  console.error("There is no such directory!Operation failed!");
-	}
- };
+  try {
+    if (!directory) {
+      console.error("There is no such directory!Operation failed!");
+    }
+    if (directory) {
+      const newDisk = directory.toUpperCase() + `\\`;
+      await fs.access(newDisk);
+      process.chdir(newDisk);
+      showCurDir();
+      return;
+    }
+    const absolutePath = path.resolve(process.cwd(), directory);
+    await fs.access(absolutePath);
+    process.chdir(absolutePath);
+  } catch (error) {
+    console.error("There is no such directory!Operation failed!");
+  }
+};

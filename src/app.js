@@ -6,6 +6,8 @@ import {
   changeDirectory,
 } from "./navigation/directory.js";
 import { listFilesAsync } from "./list/listFiles.js";
+import { create, read, remove, copy, rename } from "./fs/basicFsOperations.js";
+import { calculate } from "./hash/calculateHash.js";
 
 greetUser();
 const rl = readline.createInterface({
@@ -14,18 +16,14 @@ const rl = readline.createInterface({
 });
 
 rl.on("line", (line) => {
+  const pathToDir = line.slice(3).trim();
   const lineArr = line.trim().split(" ");
-
   switch (lineArr[0]) {
     case ".exit":
       rl.close();
       break;
     case "cd":
-      if (lineArr.length === 2) {
-        changeDirectory(lineArr[1]);
-      } else {
-        console.error(`Invalid input`);
-      }
+      changeDirectory(pathToDir);
       break;
     case "up":
       if (lineArr.length === 1) {
@@ -38,10 +36,42 @@ rl.on("line", (line) => {
     case "ls":
       if (lineArr.length === 1) {
         listFilesAsync();
-        showCurDir();
       } else {
         console.error(`Invalid input`);
       }
+      showCurDir();
+      break;
+    case "add":
+      create(pathToDir);
+      showCurDir();
+      break;
+    case "cat":
+      read(pathToDir);
+      showCurDir();
+      break;
+    case "rm":
+      remove(pathToDir);
+      showCurDir();
+      break;
+    case "cp":
+      if (lineArr[1] && lineArr[2]) {
+        copy(lineArr[1], lineArr[2]);
+      } else {
+        console.error(`Invalid input`);
+      }
+      showCurDir();
+      break;
+    case "rn":
+      if (lineArr[1] && lineArr[2]) {
+        rename(lineArr[1], lineArr[2]);
+      } else {
+        console.error(`Invalid input`);
+      }
+      showCurDir();
+      break;
+    case "hash":
+      calculate(lineArr[1]);
+      showCurDir();
       break;
     default:
       console.error(`Invalid input`);
