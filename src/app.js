@@ -8,7 +8,8 @@ import {
 import { listFilesAsync } from "./list/listFiles.js";
 import { create, read, remove, copy, rename } from "./fs/basicFsOperations.js";
 import { calculate } from "./hash/calculateHash.js";
-
+import { compress } from "./zip/compress.js";
+import { decompress } from "./zip/decompress.js";
 greetUser();
 const rl = readline.createInterface({
   input: process.stdin,
@@ -71,6 +72,22 @@ rl.on("line", (line) => {
       break;
     case "hash":
       calculate(lineArr[1]);
+      showCurDir();
+      break;
+    case "compress":
+      if (lineArr[1] && lineArr[2]) {
+        compress(lineArr[1], lineArr[2]);
+      } else {
+        console.error(`Invalid input`);
+      }
+      showCurDir();
+      break;
+    case "decompress":
+      if (lineArr[1] && lineArr[2]) {
+        decompress(lineArr[1], lineArr[2]);
+      } else {
+        console.error(`Invalid input`);
+      }
       showCurDir();
       break;
     default:
