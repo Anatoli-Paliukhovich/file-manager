@@ -5,11 +5,19 @@ import {
   navigateUp,
   changeDirectory,
 } from "./navigation/directory.js";
+import {
+  showEOL,
+  showUserName,
+  showHomeDir,
+  showArch,
+  showCpusInfo,
+} from "./os/osOperations.js";
 import { listFilesAsync } from "./list/listFiles.js";
 import { create, read, remove, copy, rename } from "./fs/basicFsOperations.js";
 import { calculate } from "./hash/calculateHash.js";
 import { compress } from "./zip/compress.js";
 import { decompress } from "./zip/decompress.js";
+
 greetUser();
 const rl = readline.createInterface({
   input: process.stdin,
