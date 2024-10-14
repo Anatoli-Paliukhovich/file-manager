@@ -12,8 +12,16 @@ import {
   showArch,
   showCpusInfo,
 } from "./os/osOperations.js";
+import {
+  create,
+  read,
+  remove,
+  copy,
+  rename,
+  move,
+} from "./fs/basicFsOperations.js";
 import { listFilesAsync } from "./list/listFiles.js";
-import { create, read, remove, copy, rename } from "./fs/basicFsOperations.js";
+
 import { calculate } from "./hash/calculateHash.js";
 import { compress } from "./zip/compress.js";
 import { decompress } from "./zip/decompress.js";
@@ -28,75 +36,81 @@ rl.on("line", (line) => {
   const pathToDir = line.slice(3).trim();
   const lineArr = line.trim().split(" ");
   switch (lineArr[0]) {
-    case ".exit":
-      rl.close();
-      break;
     case "cd":
       changeDirectory(pathToDir);
       break;
     case "up":
-      if (lineArr.length === 1) {
-        navigateUp();
-        showCurDir();
-      } else {
-        console.error(`Invalid input`);
-      }
+      lineArr.length === 1 ? navigateUp() : console.error(`Invalid input`);
       break;
     case "ls":
-      if (lineArr.length === 1) {
-        listFilesAsync();
-      } else {
-        console.error(`Invalid input`);
-      }
-      showCurDir();
+      lineArr.length === 1 ? listFilesAsync() : console.error(`Invalid input`);
+      break;
+    case "cat":
+      lineArr.length === 2
+        ? read(lineArr[1])
+        : console.error(`Operation failed: provide the name of the file!`);
       break;
     case "add":
       create(pathToDir);
-      showCurDir();
-      break;
-    case "cat":
-      read(pathToDir);
-      showCurDir();
       break;
     case "rm":
       remove(pathToDir);
-      showCurDir();
       break;
     case "cp":
-      if (lineArr[1] && lineArr[2]) {
-        copy(lineArr[1], lineArr[2]);
-      } else {
-        console.error(`Invalid input`);
-      }
+      lineArr[1] && lineArr[2]
+        ? copy(lineArr[1], lineArr[2])
+        : console.error(
+            `Operation failed: The correct filePath has not been provided!`
+          );
+      break;
+    case "mv":
+      lineArr[1] && lineArr[2]
+        ? move(lineArr[1], lineArr[2])
+        : console.error(
+            `Operation failed: The correct filePath has not been provided!`
+          );
       showCurDir();
       break;
     case "rn":
-      if (lineArr[1] && lineArr[2]) {
-        rename(lineArr[1], lineArr[2]);
-      } else {
-        console.error(`Invalid input`);
-      }
+      lineArr[1] && lineArr[2]
+        ? rename(lineArr[1], lineArr[2])
+        : console.error(
+            `Operation failed: The correct filePath has not been provided!`
+          );
+      break;
+    case "os":
+      lineArr[1] === "--EOL"
+        ? showEOL()
+        : lineArr[1] === "--cpus"
+        ? showCpusInfo()
+        : lineArr[1] === "--homedir"
+        ? showHomeDir()
+        : lineArr[1] === "--username"
+        ? showUserName()
+        : lineArr[1] === "--architecture"
+        ? showArch()
+        : console.error("Invalid input");
       showCurDir();
       break;
     case "hash":
       calculate(lineArr[1]);
-      showCurDir();
       break;
     case "compress":
-      if (lineArr[1] && lineArr[2]) {
-        compress(lineArr[1], lineArr[2]);
-      } else {
-        console.error(`Invalid input`);
-      }
-      showCurDir();
+      lineArr[1] && lineArr[2]
+        ? compress(lineArr[1], lineArr[2])
+        : console.error(
+            `Operation failed: The correct filePath has not been provided!`
+          );
       break;
     case "decompress":
-      if (lineArr[1] && lineArr[2]) {
-        decompress(lineArr[1], lineArr[2]);
-      } else {
-        console.error(`Invalid input`);
-      }
-      showCurDir();
+      lineArr[1] && lineArr[2]
+        ? decompress(lineArr[1], lineArr[2])
+        : console.error(
+            `Operation failed: The correct filePath has not been provided!`
+          );
+      break;
+    case ".exit":
+      rl.close();
       break;
     default:
       console.error(`Invalid input`);

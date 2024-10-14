@@ -18,12 +18,13 @@ export const navigateUp = () => {
   } else {
     process.chdir(rootDirectory);
   }
+  showCurDir();
 };
 
 export const changeDirectory = async (directory) => {
   try {
     if (!directory) {
-      console.error("There is no such directory!Operation failed!");
+      console.error("Operation failed: There is no such directory!");
     }
     if (directory) {
       const newDisk = directory.toUpperCase() + `\\`;
@@ -36,6 +37,6 @@ export const changeDirectory = async (directory) => {
     await fs.access(absolutePath);
     process.chdir(absolutePath);
   } catch (error) {
-    console.error("There is no such directory!Operation failed!");
+    console.error("Operation failed: There is no such directory!");
   }
 };

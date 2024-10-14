@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { showCurDir } from "../navigation/directory.js";
 export const listFilesAsync = async () => {
   try {
     const currentDir = process.cwd();
@@ -20,7 +21,10 @@ export const listFilesAsync = async () => {
       return a.Type === "directory" ? -1 : 1;
     });
     console.table(filesArr);
+    showCurDir();
   } catch (error) {
-    console.error("There is an error in listing files and folders");
+    console.error(
+      "Operation failed: There is an error in listing files and folders!"
+    );
   }
 };
